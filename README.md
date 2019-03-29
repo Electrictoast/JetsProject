@@ -7,11 +7,10 @@
 ###Concepts and Technologies
 
 *Object-Oriented Deksign
-	
-	*Polymorphism
-	*Abstraction
-	*Inheritance
-	*Encapsulation
+  *Polymorphism
+  *Abstraction
+  *Inheritance
+  *Encapsulation
 *Eclipse
 *Git
 	
