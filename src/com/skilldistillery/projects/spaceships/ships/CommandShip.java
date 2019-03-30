@@ -10,77 +10,133 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CommandShip {
-	private static final Exception OutOfBoundsException = null;
 	public void run(Scanner sc) {
-		List<Ship> deck= new ArrayList<>();
-		List<String> shipInfo= new ArrayList<>();
-		readShipData("ShipData.txt",shipInfo);
-		fillDeck(shipInfo,deck);
-		System.out.println(deck);
-		menu(sc);
-		
+		List<Ship> deck = new ArrayList<>();
+		List<String> shipInfo = new ArrayList<>();
+		readShipData("ShipData.txt", shipInfo);
+		fillDeck(shipInfo, deck);
+		while (true) {
+			int select = menu(sc);
+			actionMenu(select, deck, sc);
+		}
 	}
+
 	public void fillDeck(List<String> shipInfo, List<Ship> deck) {
 		String[] temp;
 		for (String ship : shipInfo) {
 			temp = ship.split(", ");
 //			String type, double speed, int range, double price
-			if(temp[1].contains("Cargo")) {
-				Ship tempShip =new Civilian(temp[0],Double.parseDouble(temp[1]),Integer.parseInt(temp[2]), Double.parseDouble(temp[3]));
+			if (temp[0].contains("Cargo")) {
+				Cargo tempShip = new Cargo(temp[0], Double.parseDouble(temp[1]), Integer.parseInt(temp[2]),
+						Double.parseDouble(temp[3]));
 				deck.add(tempShip);
-			}else {
-				Ship tempShip =new Combat(temp[0],Double.parseDouble(temp[1]),Integer.parseInt(temp[2]), Double.parseDouble(temp[3]));
+			} else if (temp[0].contains("X")) {
+				Fighter tempShip = new Fighter(temp[0], Double.parseDouble(temp[1]), Integer.parseInt(temp[2]),
+						Double.parseDouble(temp[3]));
+				deck.add(tempShip);
+			} else if (temp[0].contains("Y")) {
+				Bomber tempShip = new Bomber(temp[0], Double.parseDouble(temp[1]), Integer.parseInt(temp[2]),
+						Double.parseDouble(temp[3]));
+				deck.add(tempShip);
+			} else if (temp[0].contains("Transport")) {
+				Transport tempShip = new Transport(temp[0], Double.parseDouble(temp[1]), Integer.parseInt(temp[2]),
+						Double.parseDouble(temp[3]));
 				deck.add(tempShip);
 			}
 		}
 	}
+
 	public void readShipData(String fileName, List<String> shipInfo) {
 //		read ShipData.txt to create objects
 		try {
-			  FileReader fr = new FileReader(fileName);
-			  BufferedReader br = new BufferedReader(fr);
-			  String line;
-			  while ( (line = br.readLine()) != null) {
-			    shipInfo.add(line);
-			  }
-			  br.close();
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			String line;
+			while ((line = br.readLine()) != null) {
+				shipInfo.add(line);
 			}
-			catch (FileNotFoundException e) {
-			  System.err.println("Invalid filename: " + e.getMessage());
-			}
-			catch (IOException e) {
-			  System.err.println("Problem while reading "+fileName+": "+e.getMessage());
-			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			System.err.println("Invalid filename: " + e.getMessage());
+		} catch (IOException e) {
+			System.err.println("Problem while reading " + fileName + ": " + e.getMessage());
+		}
 	}
 
-	public void getBestSpeed() {
+	public void getBestSpeed(List<Ship> deck) {
 //		loop through all ships to find best speed
+		Ship temp = null;
+		for (Ship ship : deck) {
+			if (temp == null) {
+				temp = ship;
+			} else if (ship.getSpeed() > temp.getSpeed()) {
+				temp = ship;
+			}
+		}
+		System.out.println(temp);
 	}
-	public void getBestRange() {
+
+	public void getBestRange(List<Ship> deck) {
 //		loop through all ships to find best range
+		Ship temp = null;
+		for (Ship ship : deck) {
+			if (temp == null) {
+				temp = ship;
+			} else if (ship.getRange() > temp.getRange()) {
+				temp = ship;
+			}
+		}
+		System.out.println(temp);
 	}
-	public void flyAll() {
+
+	public void flyAll(List<Ship> deck) {
 // 		call fly() on all ships
+		for (Ship ship : deck) {
+			ship.fly();
+		}
 	}
-	public void listAll() {
+
+	public void listAll(List<Ship> deck) {
 //		print out list of ships for loop with new lines
+		for (int i = 0; i < deck.size(); i++) {
+			System.out.println(deck.get(i));
+		}
 	}
-	public void loadAll() {
-//		call load() on all cargo ships
+
+	public void loadAll(List<Ship> deck) {
+//		call load() on all cargo ships 
+		for (int i = 0; i < deck.size(); i++) {
+			if (deck.get(i) instanceof Cargo) {
+				((Cargo) deck.get(i)).load();
+			} else if (deck.get(i) instanceof Transport) {
+				((Transport) deck.get(i)).load();
+			}
+		}
 	}
-	public void fireAll() {
+
+	public void fireAll(List<Ship> deck) {
 //		call fire() on all combat ships
+		for (int i = 0; i < deck.size(); i++) {
+			if (deck.get(i) instanceof Fighter) {
+				((Fighter) deck.get(i)).fire();
+			} else if (deck.get(i) instanceof Bomber) {
+				((Bomber) deck.get(i)).fire();
+			}
+		}
 	}
-	public void addShip() {
+
+	public void addShip(List<Ship> deck) {
 //		add new ship to deck
 	}
-	public void pullShip() {
+
+	public void pullShip(List<Ship> deck) {
 //		remove ship from deck
 	}
+
 	public int menu(Scanner sc) {
-		Exception OutOfBoundsException= new Exception("Select a number between 1-9");
-		boolean valid=false;
-		int select=0;
+		Exception OutOfBoundsException = new Exception("Select a number between 1-9");
+		boolean valid = false;
+		int select = 0;
 		System.out.println("What are your orders admiral?");
 		System.out.println("1. List fleet");
 		System.out.println("2. Fly all jets");
@@ -91,45 +147,71 @@ public class CommandShip {
 		System.out.println("7. Add ship to fleet");
 		System.out.println("8. Decommission ship");
 		System.out.println("9. Quit");
-		
-		while(!valid) {
+
+		while (!valid) {
 			try {
-				select= sc.nextInt();
-				if(select>0 && select<9 ) {
-					valid=true;
+				select = sc.nextInt();
+				if (select > 0 && select < 9) {
+					valid = true;
 					return select;
-				}else {
+				} else {
 					throw OutOfBoundsException;
 				}
-			}catch(InputMismatchException e){
+			} catch (InputMismatchException e) {
 				System.out.println("Please enter a number between 1 and 9");
 				sc.nextLine();
-			}catch(Exception e) {
+			} catch (Exception e) {
 				System.out.println("Please enter a number between 1 and 9");
 				sc.nextLine();
 			}
 		}
-		
+
 		return select;
 	}
-	public void actionMenu(int select) {
+
+	public void actionMenu(int select, List<Ship> deck, Scanner sc) {
+		sc.nextLine();
 		switch (select) {
 		case 1:
-			listAll();
+			listAll(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 2:
-			flyAll();
+			flyAll(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 3:
-			getBestSpeed();
+			getBestSpeed(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 4:
-			getBestRange();
+			getBestRange(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 5:
-			loadAll();
+			loadAll(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 6:
-			fireAll();
+			fireAll(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 7:
-			addShip();
+			addShip(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 8:
-			pullShip();
+			pullShip(deck);
+			System.out.println("Press enter to continue");
+			sc.nextLine();
+			break;
 		case 9:
 			System.out.println("May the force be with you.");
 			System.exit(0);

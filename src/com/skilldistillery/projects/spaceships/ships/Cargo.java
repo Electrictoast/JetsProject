@@ -1,14 +1,14 @@
 package com.skilldistillery.projects.spaceships.ships;
 
-public class Civilian extends Ship {
+public class Cargo extends Ship implements Hold {
 	public void load() {
 //		load cargo onto ship
 		System.out.println(this.getType()+ " is loaded and ready to launch.");
 	}
-	public Civilian() {
+	public Cargo() {
 		super();
 	}
-	public Civilian(String type, double speed, int range, double price) {
+	public Cargo(String type, double speed, int range, double price) {
 		super(type, speed, range, price);
 	}
 
