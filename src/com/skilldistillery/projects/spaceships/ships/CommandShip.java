@@ -125,12 +125,75 @@ public class CommandShip {
 		}
 	}
 
-	public void addShip(List<Ship> deck) {
+	public void addShip(List<Ship> deck, Scanner sc) {
 //		add new ship to deck
+		String type = "";
+		double speed = 0;
+		int range = 0;
+		double price = 0;
+		boolean valid = false;
+		do {
+			try {
+				System.out.println("Please enter the type of ship you would like to add\n(i.e. X-wing, Tie Fighter)");
+				type = sc.nextLine();
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Error invalid input");
+				valid = false;
+			}
+		} while (!valid);
+		do {
+			try {
+				System.out.println("Please enter the max speed of the new " + type);
+				speed = sc.nextDouble();
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Error invalid input");
+				valid = false;
+			}
+		} while (!valid);
+		do {
+			try {
+				System.out.println("Please enter the max range of the new " + type);
+				range = sc.nextInt();
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Error invalid input");
+				valid = false;
+			}
+		} while (!valid);
+		do {
+			try {
+				System.out.println("Please enter the purchase price of the new " + type);
+				price = sc.nextDouble();
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Error invalid input");
+				valid = false;
+			}
+		} while (!valid);
+		deck.add(new ShipImpl(type, speed, range, price));
 	}
 
-	public void pullShip(List<Ship> deck) {
+	public void pullShip(List<Ship> deck, Scanner sc) {
 //		remove ship from deck
+		boolean valid = false;
+		for (int i = 0; i < deck.size(); i++) {
+			System.out.print("Ship # " + (i + 1) + ": ");
+			System.out.println(deck.get(i));
+		}
+		do {
+			try {
+				System.out.println("Which number ship would you like to decommission?");
+				int choice = sc.nextInt();
+				valid = true;
+				System.out.println("Aye aye!");
+				deck.remove(choice);
+			} catch (Exception e) {
+				System.out.println("invalid entry");
+				valid = false;
+			}
+		} while (!valid);
 	}
 
 	public int menu(Scanner sc) {
@@ -203,12 +266,12 @@ public class CommandShip {
 			sc.nextLine();
 			break;
 		case 7:
-			addShip(deck);
+			addShip(deck, sc);
 			System.out.println("Press enter to continue");
 			sc.nextLine();
 			break;
 		case 8:
-			pullShip(deck);
+			pullShip(deck, sc);
 			System.out.println("Press enter to continue");
 			sc.nextLine();
 			break;
