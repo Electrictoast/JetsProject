@@ -15,4 +15,9 @@ public class Transport extends Ship implements Hold {
 		System.out.println("All aboard!");
 	}
 
+	@Override
+	public String toString() {
+		return "Transport [name=" + name + ", speed=" + speed + ", range=" + range + ", price=" + price + "]";
+	}
+
 }

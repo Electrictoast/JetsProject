@@ -11,5 +11,9 @@ public class Fighter extends Ship implements Weapon{
 	public Fighter(String type, double speed, int range, double price) {
 		super(type, speed, range, price);
 	}
+	@Override
+	public String toString() {
+		return "Fighter [name=" + name + ", speed=" + speed + ", range=" + range + ", price=" + price + "]";
+	}
 
 }

@@ -25,7 +25,6 @@ public class CommandShip {
 		String[] temp;
 		for (String ship : shipInfo) {
 			temp = ship.split(", ");
-//			String type, double speed, int range, double price
 			if (temp[0].contains("Cargo")) {
 				Cargo tempShip = new Cargo(temp[0], Double.parseDouble(temp[1]), Integer.parseInt(temp[2]),
 						Double.parseDouble(temp[3]));
@@ -132,9 +131,22 @@ public class CommandShip {
 		int range = 0;
 		double price = 0;
 		boolean valid = false;
-		do {
+		int choice=0;
+			do {
 			try {
-				System.out.println("Please enter the type of ship you would like to add\n(i.e. X-wing, Tie Fighter)");
+				System.out.println("what class of ship would you like to add?");
+				System.out.println("1. Fighter\n2. Bomber\n3. Cargo\n4. Transport");
+				choice=sc.nextInt();
+				sc.nextLine();
+				valid=true;
+			}catch(Exception e) {
+				System.out.println("Invalid input");
+				valid=false;
+			}
+			}while(!valid);
+			do {
+			try {
+				System.out.println("Please enter the name of the ship you would like to add\n(i.e. X-wing, Tie Fighter)");
 				type = sc.nextLine();
 				valid = true;
 			} catch (Exception e) {
@@ -146,6 +158,7 @@ public class CommandShip {
 			try {
 				System.out.println("Please enter the max speed of the new " + type);
 				speed = sc.nextDouble();
+				sc.nextLine();
 				valid = true;
 			} catch (Exception e) {
 				System.out.println("Error invalid input");
@@ -156,6 +169,7 @@ public class CommandShip {
 			try {
 				System.out.println("Please enter the max range of the new " + type);
 				range = sc.nextInt();
+				sc.nextLine();
 				valid = true;
 			} catch (Exception e) {
 				System.out.println("Error invalid input");
@@ -166,13 +180,35 @@ public class CommandShip {
 			try {
 				System.out.println("Please enter the purchase price of the new " + type);
 				price = sc.nextDouble();
+				sc.nextLine();
 				valid = true;
 			} catch (Exception e) {
 				System.out.println("Error invalid input");
 				valid = false;
 			}
 		} while (!valid);
-		deck.add(new ShipImpl(type, speed, range, price));
+		switch(choice) {
+		case 1:
+			deck.add(new Fighter(type, speed, range, price));
+			System.out.println("New Fighter created\n"+deck.get(deck.size()-1));
+			break;
+		case 2:
+			deck.add(new Bomber(type, speed, range, price));
+			System.out.println("New Bomber created\n"+deck.get(deck.size()-1));
+			break;
+		case 3:
+			deck.add(new Cargo(type, speed, range, price));
+			System.out.println("New Cargo created\n"+deck.get(deck.size()-1));
+			break;
+		case 4:
+			deck.add(new Transport(type, speed, range, price));
+			System.out.println("New Transport created\n"+deck.get(deck.size()-1));
+			break;
+		default:
+			deck.add(new ShipImpl(type, speed, range, price));
+			System.out.println("New Ship created\n"+deck.get(deck.size()-1));
+			break;
+		}
 	}
 
 	public void pullShip(List<Ship> deck, Scanner sc) {
@@ -200,12 +236,14 @@ public class CommandShip {
 		Exception OutOfBoundsException = new Exception("Select a number between 1-9");
 		boolean valid = false;
 		int select = 0;
-		System.out.println("What are your orders admiral?");
+		System.out.println("===============================");
+		System.out.println("|What are your orders admiral?|");
+		System.out.println("===============================");
 		System.out.println("1. List fleet");
-		System.out.println("2. Fly all jets");
-		System.out.println("3. View fastest");
+		System.out.println("2. Launch fleet");
+		System.out.println("3. View fastest ship");
 		System.out.println("4. View ship with longest range");
-		System.out.println("5. Load all cargo ships");
+		System.out.println("5. Load all ships");
 		System.out.println("6. Fire all!");
 		System.out.println("7. Add ship to fleet");
 		System.out.println("8. Decommission ship");

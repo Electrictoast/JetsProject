@@ -15,4 +15,9 @@ public class Bomber extends Ship implements Weapon {
 		System.out.println("BOOM!\n\tBOOM!\n\t\tBOOM!");
 	}
 
+	@Override
+	public String toString() {
+		return "Bomber [name=" + name + ", speed=" + speed + ", range=" + range + ", price=" + price + "]";
+	}
+
 }

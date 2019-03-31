@@ -1,7 +1,7 @@
 package com.skilldistillery.projects.spaceships.ships;
 
 public abstract class Ship {
-	String type;
+	String name;
 	double speed;
 	int range;
 	double price;
@@ -13,7 +13,7 @@ public abstract class Ship {
 		
 	}
 	public Ship(String type, double speed, int range, double price) {
-		this.type=type;
+		this.name=type;
 		this.speed=speed;
 		this.range=range;
 		this.price=price;
@@ -28,7 +28,7 @@ public abstract class Ship {
 		result = prime * result + range;
 		temp = Double.doubleToLongBits(speed);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 	@Override
@@ -46,22 +46,22 @@ public abstract class Ship {
 			return false;
 		if (Double.doubleToLongBits(speed) != Double.doubleToLongBits(other.speed))
 			return false;
-		if (type == null) {
-			if (other.type != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!type.equals(other.type))
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "Ship [type=" + type + ", speed=" + speed + ", range=" + range + ", price=" + price + "]";
+		return "Ship [name=" + name + ", speed=" + speed + ", range=" + range + ", price=" + price + "]";
 	}
 	public String getType() {
-		return type;
+		return name;
 	}
 	public void setType(String type) {
-		this.type = type;
+		this.name = type;
 	}
 	public double getSpeed() {
 		return speed;
